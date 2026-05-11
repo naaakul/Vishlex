@@ -27,7 +27,7 @@ export default function Background() {
       <GrainGradient
         width={size.w}
         height={size.h}
-        colors={["#5a5a5a", "#000000"]}
+        colors={["#2a2a2a", "#000000"]}
         colorBack="#000000"
         softness={0}
         intensity={1}

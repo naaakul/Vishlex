@@ -110,7 +110,7 @@ export default function AppsPage() {
                 : `${apps.length} app${apps.length > 1 ? "s" : ""}`}
             </p>
             <Button
-              className="bg-black cursor-pointer"
+              className="bg-white cursor-pointer"
               size="sm"
               onClick={() => setAppModal(true)}
             >
@@ -134,7 +134,7 @@ export default function AppsPage() {
                   Create your first app to start tracking analytics
                 </p>
                 <Button
-                  className="bg-black cursor-pointer"
+                  className="cursor-pointer"
                   size="sm"
                   onClick={() => setAppModal(true)}
                 >

@@ -81,6 +81,7 @@ function getReferrer() {
 function buildPageviewPayload(trackingId, durationMs = null) {
   const utm = getUTMParams();
   return {
+    type: "pageview",
     tracking_id: trackingId,
     url: location.pathname + location.search,
     referrer: getReferrer(),
@@ -95,6 +96,7 @@ function buildPageviewPayload(trackingId, durationMs = null) {
 }
 function buildEventPayload(trackingId, name, properties = null) {
   return {
+    type: "event",
     tracking_id: trackingId,
     name,
     properties,

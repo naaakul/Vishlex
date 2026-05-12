@@ -1,3 +1,5 @@
+// sdk\src\lib\device.ts
+
 type DeviceType = "desktop" | "mobile" | "tablet"
 
 export function getDevice(): DeviceType {

@@ -19,6 +19,7 @@ declare function getReferrer(): string | null;
 declare function send(payload: unknown, endpoint: string): void;
 
 type PageviewPayload = {
+    type: "pageview";
     tracking_id: string;
     url: string;
     referrer: string | null;
@@ -35,6 +36,7 @@ type PageviewPayload = {
     duration_ms: number | null;
 };
 type EventPayload = {
+    type: "event";
     tracking_id: string;
     name: string;
     properties: Record<string, unknown> | null;

@@ -1,3 +1,5 @@
+// sdk\src\lib\sender.ts
+
 export function send(payload: unknown, endpoint: string): void {
   const body = JSON.stringify(payload)
 

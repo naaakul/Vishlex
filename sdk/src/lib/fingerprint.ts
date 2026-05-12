@@ -1,4 +1,13 @@
+// sdk/src/lib/fingerprint.ts
+
+// Cached so getVisitorHash() and getSessionHash() don't recompute
+// on every call within the same page load.
+let _visitorHash: string | null = null
+let _sessionHash: string | null = null
+
 export function getVisitorHash(): string {
+  if (_visitorHash) return _visitorHash
+
   const raw = [
     navigator.userAgent,
     navigator.language,
@@ -9,12 +18,37 @@ export function getVisitorHash(): string {
     navigator.hardwareConcurrency ?? "",
   ].join("|")
 
-  return hashString(raw)
+  _visitorHash = hashString(raw)
+  return _visitorHash
 }
 
 export function getSessionHash(): string {
+  if (_sessionHash) return _sessionHash
+
+  // Try to reuse session from sessionStorage so it survives
+  // soft navigations and doesn't reset mid-session.
+  const STORAGE_KEY = "vsh_session"
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      _sessionHash = stored
+      return _sessionHash
+    }
+  } catch {
+    // sessionStorage blocked (e.g. private mode on some browsers) — fall through
+  }
+
+  // New session: hash visitorHash + timestamp bucket (30-min windows)
   const bucket = Math.floor(Date.now() / (1000 * 60 * 30))
-  return hashString(getVisitorHash() + "|" + bucket)
+  _sessionHash = hashString(getVisitorHash() + "|" + bucket)
+
+  try {
+    sessionStorage.setItem(STORAGE_KEY, _sessionHash)
+  } catch {
+    // ignore
+  }
+
+  return _sessionHash
 }
 
 function hashString(str: string): string {

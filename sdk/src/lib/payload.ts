@@ -1,3 +1,5 @@
+// sdk\src\lib\payload.ts
+
 import { getVisitorHash, getSessionHash } from "./fingerprint"
 import { getDevice, getBrowser, getOS } from "./device"
 import { getUTMParams, getReferrer } from "./utm"

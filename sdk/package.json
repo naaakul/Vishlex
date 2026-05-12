@@ -1,6 +1,6 @@
 {
   "name": "vishlex",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Privacy-friendly analytics SDK for Next.js — bring your own database",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

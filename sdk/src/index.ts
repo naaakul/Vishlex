@@ -1,3 +1,5 @@
+// sdk\src\index.ts
+
 export { getVisitorHash, getSessionHash } from "./lib/fingerprint"
 export { getDevice, getBrowser, getOS }   from "./lib/device"
 export { getUTMParams, getReferrer }       from "./lib/utm"

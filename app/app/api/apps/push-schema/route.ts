@@ -1,3 +1,5 @@
+// app/api/apps/push-schema/route.ts
+
 import { NextResponse } from "next/server"
 import { prisma }       from "@/lib/prisma"
 import getServerSession from "@/utils/getServerSession"
@@ -25,7 +27,6 @@ export async function POST(req: Request) {
     where:  { id: databaseId, userId: session.user.id },
     select: { id: true, encryptedDbUri: true },
   })
-
   if (!database) {
     return NextResponse.json({ error: "Database not found" }, { status: 404 })
   }
@@ -48,6 +49,10 @@ export async function POST(req: Request) {
       ssl: !dbUri.includes("localhost") ? { rejectUnauthorized: false } : false,
     })
     await client.connect()
+
+    // ── Tables ──────────────────────────────────────────────────────────────
+    // tracking_id is the app's trackingId (uuid) — multiple apps can share
+    // one database, all rows are scoped by tracking_id so they never mix.
 
     await client.query(`
       CREATE TABLE IF NOT EXISTS antz_pageviews (
@@ -99,20 +104,43 @@ export async function POST(req: Request) {
         started_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
         updated_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
       );
+    `)
 
-      CREATE INDEX IF NOT EXISTS idx_pageviews_tracking ON antz_pageviews(tracking_id);
-      CREATE INDEX IF NOT EXISTS idx_pageviews_created  ON antz_pageviews(created_at);
-      CREATE INDEX IF NOT EXISTS idx_pageviews_visitor  ON antz_pageviews(visitor_hash);
-      CREATE INDEX IF NOT EXISTS idx_pageviews_session  ON antz_pageviews(session_hash);
-      CREATE INDEX IF NOT EXISTS idx_events_tracking    ON antz_events(tracking_id);
-      CREATE INDEX IF NOT EXISTS idx_events_created     ON antz_events(created_at);
-      CREATE INDEX IF NOT EXISTS idx_sessions_tracking  ON antz_sessions(tracking_id);
-      CREATE INDEX IF NOT EXISTS idx_sessions_started   ON antz_sessions(started_at);
-      CREATE INDEX IF NOT EXISTS idx_sessions_visitor   ON antz_sessions(visitor_hash);
+    // ── Indexes ─────────────────────────────────────────────────────────────
+    // Composite (tracking_id, created_at/started_at) indexes are the most
+    // important — every single dashboard query filters by both columns.
+    // Simple single-column indexes on tracking_id alone would still do a
+    // partial scan on created_at; the composite eliminates that.
+
+    await client.query(`
+      -- pageviews: core range queries (stats, timeseries, concurrent)
+      CREATE INDEX IF NOT EXISTS idx_pv_tid_created
+        ON antz_pageviews (tracking_id, created_at DESC);
+
+      -- pageviews: visitor dedup (COUNT DISTINCT visitor_hash)
+      CREATE INDEX IF NOT EXISTS idx_pv_tid_visitor
+        ON antz_pageviews (tracking_id, visitor_hash);
+
+      -- pageviews: session lookup
+      CREATE INDEX IF NOT EXISTS idx_pv_session
+        ON antz_pageviews (session_hash);
+
+      -- sessions: range queries (bounce rate, session count)
+      CREATE INDEX IF NOT EXISTS idx_sess_tid_started
+        ON antz_sessions (tracking_id, started_at DESC);
+
+      -- sessions: upsert conflict target (already covered by UNIQUE but explicit)
+      CREATE INDEX IF NOT EXISTS idx_sess_hash
+        ON antz_sessions (session_hash);
+
+      -- events: range queries
+      CREATE INDEX IF NOT EXISTS idx_ev_tid_created
+        ON antz_events (tracking_id, created_at DESC);
     `)
 
     await client.end()
     return NextResponse.json({ ok: true })
+
   } catch (err) {
     const message = err instanceof Error ? err.message : "Schema push failed"
     const safe    = message.replace(/postgres(ql)?:\/\/[^\s]*/gi, "[uri]")

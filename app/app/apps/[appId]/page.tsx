@@ -193,7 +193,7 @@ export default function AppDashboard() {
   const loadStats = useCallback(() => {
     setLoading(true)
     Promise.all([
-      fetch(`/api/apps/${appId}/stats`).then(r => r.json()),
+      fetch(`/api/apps/${appId}/stats?range=${range}`).then(r => r.json()),
       fetch(`/api/apps/${appId}/timeseries?range=${range}`).then(r => r.json()),
     ]).then(([s, t]) => {
       setStats(s)

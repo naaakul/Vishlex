@@ -1,3 +1,5 @@
+// app\api\databases\[dbId]\health\route.ts
+
 import { NextResponse } from "next/server"
 import { prisma }       from "@/lib/prisma"
 import getServerSession from "@/utils/getServerSession"

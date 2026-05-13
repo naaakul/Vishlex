@@ -1,9 +1,22 @@
-import { createContext, useContext, useCallback, Suspense, useRef, useEffect } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { jsxs, jsx } from 'react/jsx-runtime';
+"use client";
+"use client";
+
+// src/next/index.tsx
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+  Suspense
+} from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 // src/lib/fingerprint.ts
+var _visitorHash = null;
+var _sessionHash = null;
 function getVisitorHash() {
+  if (_visitorHash) return _visitorHash;
   const raw = [
     navigator.userAgent,
     navigator.language,
@@ -13,11 +26,27 @@ function getVisitorHash() {
     (/* @__PURE__ */ new Date()).getTimezoneOffset(),
     navigator.hardwareConcurrency ?? ""
   ].join("|");
-  return hashString(raw);
+  _visitorHash = hashString(raw);
+  return _visitorHash;
 }
 function getSessionHash() {
+  if (_sessionHash) return _sessionHash;
+  const STORAGE_KEY = "vsh_session";
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      _sessionHash = stored;
+      return _sessionHash;
+    }
+  } catch {
+  }
   const bucket = Math.floor(Date.now() / (1e3 * 60 * 30));
-  return hashString(getVisitorHash() + "|" + bucket);
+  _sessionHash = hashString(getVisitorHash() + "|" + bucket);
+  try {
+    sessionStorage.setItem(STORAGE_KEY, _sessionHash);
+  } catch {
+  }
+  return _sessionHash;
 }
 function hashString(str) {
   let hash = 2166136261;
@@ -123,6 +152,9 @@ function send(payload, endpoint) {
   }).catch(() => {
   });
 }
+
+// src/next/index.tsx
+import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 var VishlexContext = createContext({ trackEvent: () => {
 } });
 function useVishlex() {
@@ -187,7 +219,29 @@ function VishlexProvider({ trackingId, collectUrl, disabled = false, children })
     children
   ] });
 }
-
-export { VishlexProvider, useVishlex };
-//# sourceMappingURL=next.mjs.map
-//# sourceMappingURL=next.mjs.map
+function VishProvider({ disabled = false, children }) {
+  const trackingId = process.env.NEXT_PUBLIC_VISHLEX_TRACKING_ID;
+  const collectUrl = process.env.NEXT_PUBLIC_VISHLEX_COLLECT_URL;
+  if (!trackingId || !collectUrl) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "[Vishlex] Missing env vars.\nAdd to .env.local:\n  NEXT_PUBLIC_VISHLEX_TRACKING_ID=...\n  NEXT_PUBLIC_VISHLEX_COLLECT_URL=..."
+      );
+    }
+    return /* @__PURE__ */ jsx(Fragment, { children });
+  }
+  return /* @__PURE__ */ jsx(
+    VishlexProvider,
+    {
+      trackingId,
+      collectUrl,
+      disabled,
+      children
+    }
+  );
+}
+export {
+  VishProvider,
+  VishlexProvider,
+  useVishlex
+};

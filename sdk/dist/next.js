@@ -1,11 +1,40 @@
-'use strict';
+"use client";
+"use strict";
+"use client";
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-var react = require('react');
-var navigation = require('next/navigation');
-var jsxRuntime = require('react/jsx-runtime');
+// src/next/index.tsx
+var next_exports = {};
+__export(next_exports, {
+  VishProvider: () => VishProvider,
+  VishlexProvider: () => VishlexProvider,
+  useVishlex: () => useVishlex
+});
+module.exports = __toCommonJS(next_exports);
+var import_react = require("react");
+var import_navigation = require("next/navigation");
 
 // src/lib/fingerprint.ts
+var _visitorHash = null;
+var _sessionHash = null;
 function getVisitorHash() {
+  if (_visitorHash) return _visitorHash;
   const raw = [
     navigator.userAgent,
     navigator.language,
@@ -15,11 +44,27 @@ function getVisitorHash() {
     (/* @__PURE__ */ new Date()).getTimezoneOffset(),
     navigator.hardwareConcurrency ?? ""
   ].join("|");
-  return hashString(raw);
+  _visitorHash = hashString(raw);
+  return _visitorHash;
 }
 function getSessionHash() {
+  if (_sessionHash) return _sessionHash;
+  const STORAGE_KEY = "vsh_session";
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      _sessionHash = stored;
+      return _sessionHash;
+    }
+  } catch {
+  }
   const bucket = Math.floor(Date.now() / (1e3 * 60 * 30));
-  return hashString(getVisitorHash() + "|" + bucket);
+  _sessionHash = hashString(getVisitorHash() + "|" + bucket);
+  try {
+    sessionStorage.setItem(STORAGE_KEY, _sessionHash);
+  } catch {
+  }
+  return _sessionHash;
 }
 function hashString(str) {
   let hash = 2166136261;
@@ -125,28 +170,31 @@ function send(payload, endpoint) {
   }).catch(() => {
   });
 }
-var VishlexContext = react.createContext({ trackEvent: () => {
+
+// src/next/index.tsx
+var import_jsx_runtime = require("react/jsx-runtime");
+var VishlexContext = (0, import_react.createContext)({ trackEvent: () => {
 } });
 function useVishlex() {
-  return react.useContext(VishlexContext);
+  return (0, import_react.useContext)(VishlexContext);
 }
 function TrackerInner({
   trackingId,
   collectUrl,
   disabled = false
 }) {
-  const pathname = navigation.usePathname();
-  const searchParams = navigation.useSearchParams();
-  const pageEnteredAt = react.useRef(Date.now());
-  const lastPathRef = react.useRef(null);
-  const sendPageview = react.useCallback(
+  const pathname = (0, import_navigation.usePathname)();
+  const searchParams = (0, import_navigation.useSearchParams)();
+  const pageEnteredAt = (0, import_react.useRef)(Date.now());
+  const lastPathRef = (0, import_react.useRef)(null);
+  const sendPageview = (0, import_react.useCallback)(
     (durationMs = null) => {
       if (disabled || typeof window === "undefined") return;
       send(buildPageviewPayload(trackingId, durationMs), collectUrl);
     },
     [trackingId, collectUrl, disabled]
   );
-  react.useEffect(() => {
+  (0, import_react.useEffect)(() => {
     const currentPath = pathname + (searchParams?.toString() ? `?${searchParams}` : "");
     if (lastPathRef.current === currentPath) return;
     if (lastPathRef.current !== null) {
@@ -157,7 +205,7 @@ function TrackerInner({
     lastPathRef.current = currentPath;
     pageEnteredAt.current = Date.now();
   }, [pathname, searchParams, sendPageview]);
-  react.useEffect(() => {
+  (0, import_react.useEffect)(() => {
     if (disabled) return;
     const onHide = () => {
       if (document.visibilityState === "hidden") {
@@ -170,15 +218,15 @@ function TrackerInner({
   return null;
 }
 function VishlexProvider({ trackingId, collectUrl, disabled = false, children }) {
-  const trackEvent = react.useCallback(
+  const trackEvent = (0, import_react.useCallback)(
     (name, properties) => {
       if (disabled || typeof window === "undefined") return;
       send(buildEventPayload(trackingId, name, properties ?? null), collectUrl);
     },
     [trackingId, collectUrl, disabled]
   );
-  return /* @__PURE__ */ jsxRuntime.jsxs(VishlexContext.Provider, { value: { trackEvent }, children: [
-    /* @__PURE__ */ jsxRuntime.jsx(react.Suspense, { fallback: null, children: /* @__PURE__ */ jsxRuntime.jsx(
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(VishlexContext.Provider, { value: { trackEvent }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       TrackerInner,
       {
         trackingId,
@@ -189,8 +237,30 @@ function VishlexProvider({ trackingId, collectUrl, disabled = false, children })
     children
   ] });
 }
-
-exports.VishlexProvider = VishlexProvider;
-exports.useVishlex = useVishlex;
-//# sourceMappingURL=next.js.map
-//# sourceMappingURL=next.js.map
+function VishProvider({ disabled = false, children }) {
+  const trackingId = process.env.NEXT_PUBLIC_VISHLEX_TRACKING_ID;
+  const collectUrl = process.env.NEXT_PUBLIC_VISHLEX_COLLECT_URL;
+  if (!trackingId || !collectUrl) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "[Vishlex] Missing env vars.\nAdd to .env.local:\n  NEXT_PUBLIC_VISHLEX_TRACKING_ID=...\n  NEXT_PUBLIC_VISHLEX_COLLECT_URL=..."
+      );
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children });
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    VishlexProvider,
+    {
+      trackingId,
+      collectUrl,
+      disabled,
+      children
+    }
+  );
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  VishProvider,
+  VishlexProvider,
+  useVishlex
+});

@@ -1,5 +1,10 @@
+"use client";
+
 // src/lib/fingerprint.ts
+var _visitorHash = null;
+var _sessionHash = null;
 function getVisitorHash() {
+  if (_visitorHash) return _visitorHash;
   const raw = [
     navigator.userAgent,
     navigator.language,
@@ -9,11 +14,27 @@ function getVisitorHash() {
     (/* @__PURE__ */ new Date()).getTimezoneOffset(),
     navigator.hardwareConcurrency ?? ""
   ].join("|");
-  return hashString(raw);
+  _visitorHash = hashString(raw);
+  return _visitorHash;
 }
 function getSessionHash() {
+  if (_sessionHash) return _sessionHash;
+  const STORAGE_KEY = "vsh_session";
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      _sessionHash = stored;
+      return _sessionHash;
+    }
+  } catch {
+  }
   const bucket = Math.floor(Date.now() / (1e3 * 60 * 30));
-  return hashString(getVisitorHash() + "|" + bucket);
+  _sessionHash = hashString(getVisitorHash() + "|" + bucket);
+  try {
+    sessionStorage.setItem(STORAGE_KEY, _sessionHash);
+  } catch {
+  }
+  return _sessionHash;
 }
 function hashString(str) {
   let hash = 2166136261;
@@ -119,7 +140,15 @@ function buildEventPayload(trackingId, name, properties = null) {
     session_hash: getSessionHash()
   };
 }
-
-export { buildEventPayload, buildPageviewPayload, getBrowser, getDevice, getOS, getReferrer, getSessionHash, getUTMParams, getVisitorHash, send };
-//# sourceMappingURL=index.mjs.map
-//# sourceMappingURL=index.mjs.map
+export {
+  buildEventPayload,
+  buildPageviewPayload,
+  getBrowser,
+  getDevice,
+  getOS,
+  getReferrer,
+  getSessionHash,
+  getUTMParams,
+  getVisitorHash,
+  send
+};

@@ -12,5 +12,10 @@ type Props = {
     children: ReactNode;
 };
 declare function VishlexProvider({ trackingId, collectUrl, disabled, children }: Props): react_jsx_runtime.JSX.Element;
+type AutoProps = {
+    disabled?: boolean;
+    children: ReactNode;
+};
+declare function VishProvider({ disabled, children }: AutoProps): react_jsx_runtime.JSX.Element;
 
-export { VishlexProvider, useVishlex };
+export { VishProvider, VishlexProvider, useVishlex };

@@ -1,17 +1,25 @@
+import LiquidGlass from "@/components/LiquidGlass";
 import Link from "next/link";
-import Glass from "./Glass";
-import LiquidFilter from "./LiquidFilter";
 
-export default function Navbar() {
+const Navbar = () => {
   return (
-    <>
-      <LiquidFilter />
-
-      <header className="fixed left-1/2 top-4 z-50 -translate-x-1/2">
-        <div className="relative overflow-hidden rounded-[18px]">
-          <Glass />
-
-          <div className="relative z-10 flex h-[58px] items-center justify-between gap-10 px-4">
+    <header className="fixed left-1/2 top-4 z-50 -translate-x-1/2">
+        <LiquidGlass
+          borderRadius={18}
+          backdropBlur={8}
+          backgroundOpacity={0.02}
+          borderWidth={0.035}
+          brightness={32}
+          opacity={0.55}
+          distortionScale={-180}
+          redOffset={0}
+          greenOffset={20}
+          blueOffset={40}
+          displace={1.5}
+          rimIntensity={0.25}
+          className="border border-white/[0.04]"
+        >
+          <div className="relative z-10 flex p-2 items-center justify-between gap-10 ">
             {/* Logo */}
             <Link
               href="/"
@@ -104,8 +112,9 @@ export default function Navbar() {
               </button>
             </div>
           </div>
-        </div>
+        </LiquidGlass>
       </header>
-    </>
-  );
+  )
 }
+
+export default Navbar

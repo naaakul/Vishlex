@@ -1,13 +1,6 @@
 import Navbar from "@/components/Navbar";
 
-const sections = [
-  "Hero",
-  "Features",
-  "Performance",
-  "Animations",
-  "Glass Effects",
-  "Components",
-];
+const sections = ["Hero"];
 
 export default function Home() {
   return (
@@ -25,16 +18,19 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,black_80%)]" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
+        <div className="font-instrument relative z-10 mx-auto max-w-5xl px-6 text-center">
           <p className="mb-6 text-sm uppercase tracking-[0.4em] text-white/50">
             Liquid Glass Experiment
           </p>
 
-          <h1 className="text-7xl font-bold leading-none tracking-tight">
+          <h1 className="text-7xl leading-none tracking-tight">
             Cardboard.ai
             <br />
             Glass Navbar
           </h1>
+
+          <h1 className="font-instrument text-6xl">Vishlex</h1>
+
 
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-white/60">
             Scroll this page and watch how the navbar interacts with the
@@ -50,17 +46,9 @@ export default function Home() {
           className="relative flex min-h-screen items-center justify-center overflow-hidden border-t border-white/5"
         >
           <div
-            className={`absolute inset-0 ${
-              i % 2 === 0
-                ? "bg-gradient-to-br from-blue-500/20 via-transparent to-purple-500/20"
-                : "bg-gradient-to-tr from-cyan-500/20 via-transparent to-pink-500/20"
-            }`}
-          />
-
-          <div
             className={`absolute ${
               i % 2 === 0 ? "left-10 top-20" : "right-10 bottom-20"
-            } h-[450px] w-[450px] rounded-full bg-white/10 blur-[170px]`}
+            } h-[450px] w-[450px] rounded-full `}
           />
 
           <div className="relative z-10 mx-auto max-w-4xl px-6">
@@ -82,9 +70,7 @@ export default function Home() {
                 >
                   <div className="mb-4 h-40 rounded-2xl bg-gradient-to-br from-white/20 to-transparent" />
 
-                  <h3 className="text-xl font-semibold">
-                    Card {card}
-                  </h3>
+                  <h3 className="text-xl font-semibold">Card {card}</h3>
 
                   <p className="mt-3 text-white/60">
                     Testing the glass distortion while scrolling over different
@@ -96,20 +82,6 @@ export default function Home() {
           </div>
         </section>
       ))}
-
-      {/* Footer */}
-      <footer className="flex h-[60vh] items-center justify-center border-t border-white/10">
-        <div className="text-center">
-          <h2 className="text-5xl font-bold">
-            End of Page
-          </h2>
-
-          <p className="mt-6 text-white/50">
-            If the navbar is correct, the blur and glass distortion should stay
-            beautiful throughout the entire scroll.
-          </p>
-        </div>
-      </footer>
     </main>
   );
 }

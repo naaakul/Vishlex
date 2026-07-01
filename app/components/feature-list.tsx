@@ -75,7 +75,6 @@ export default function FeatureList({
                 </AnimatePresence>
               </button>
 
-              {/* Divider */}
 
               <div className="relative h-px w-[85%] overflow-hidden bg-white/10">
 

@@ -13,6 +13,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Delight-500";
+  src: url("/fonts/Delight-Regular.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -164,4 +172,44 @@
 
 .font-delight {
   font-family: "Delight", sans-serif;
+}
+
+.font-delight-500 {
+  font-family: "Delight-500", sans-serif;
+}
+
+
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes marqueeReverse {
+  from {
+    transform: translateX(-33.333%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-reverse {
+  animation: marqueeReverse linear infinite;
+  will-change: transform;
+}
+
+button {
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }

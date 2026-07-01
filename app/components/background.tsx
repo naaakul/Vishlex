@@ -19,7 +19,6 @@ export default function Background() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // prevent hydration mismatch
   if (size.w === 0) return null;
 
   return (
@@ -40,4 +39,3 @@ export default function Background() {
     </div>
   );
 }
-//#7a7a7a

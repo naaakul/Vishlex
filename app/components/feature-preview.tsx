@@ -10,7 +10,6 @@ type Props = {
 export default function FeaturePreview({ feature }: Props) {
   return (
     <div className="relative flex h-full items-center justify-center ">
-      {/* Glow */}
 
       <motion.div
         key={`${feature.color}-glow`}
@@ -52,7 +51,6 @@ export default function FeaturePreview({ feature }: Props) {
           }}
           className="relative"
         >
-          {/* Glass Border */}
 
           <div
             className="relative h-[610px] w-[760px] rounded-[22px]"
@@ -133,6 +131,8 @@ linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px)
           </div>
         </motion.div>
       </AnimatePresence>
+
+      <div className="absolute h-[150%] w-full bg-gradient-to-l from-[#070707] from-10% to-transparent -right-[9.69rem]"></div>
     </div>
   );
 }

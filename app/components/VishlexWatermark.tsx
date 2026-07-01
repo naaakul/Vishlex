@@ -41,12 +41,12 @@ export default function VishlexWatermark() {
         <span
           aria-hidden="true"
           className="
-            font-
+            font-instrument
             pointer-events-none
             absolute inset-x-0 z-0
             block
             translate-y-[0.08em]
-            text-[clamp(3.5rem,21vw,17rem)]
+            text-[clamp(3.5rem,11vw,17rem)]
             leading-[0.8]
             whitespace-nowrap
             text-transparent
@@ -72,16 +72,16 @@ export default function VishlexWatermark() {
             filter: "blur(22px)",
           }}
         >
-          Vishlex
+          Vishlex Analytics
         </span>
 
         <span
           className="
-            font-
+            font-instrument
             relative z-10
             block
             translate-y-[0.08em]
-            text-[clamp(3.5rem,21vw,17rem)]
+            text-[clamp(3.5rem,11vw,17rem)]
             leading-[0.8]
             whitespace-nowrap
             text-white/10
@@ -91,18 +91,18 @@ export default function VishlexWatermark() {
             WebkitTextStroke: "0.8px rgba(255, 255, 255, 0.19)",
           }}
         >
-          Vishlex
+          Vishlex Analytics
         </span>
 
         <span
           aria-hidden="true"
           className="
-            font-
+            font-instrument
             pointer-events-none
             absolute inset-x-0 z-20
             block
             translate-y-[0.08em]
-            text-[clamp(3.5rem,21vw,17rem)]
+            text-[clamp(3.5rem,11vw,17rem)]
             leading-[0.8]
             whitespace-nowrap
             text-transparent
@@ -128,7 +128,7 @@ export default function VishlexWatermark() {
             filter: "drop-shadow(0 0 16px rgba(120, 190, 255, 0.4))",
           }}
         >
-          Vishlex
+          Vishlex Analytics
         </span>
       </div>
     </div>

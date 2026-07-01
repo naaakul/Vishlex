@@ -3,7 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
-const Navbar = () => {
+type Props = {
+  session: any;
+};
+
+const Navbar = ({ session }: Props) => {
   return (
     <header className="fixed left-1/2 top-4 z-50 -translate-x-1/2">
       <LiquidGlass
@@ -41,21 +45,21 @@ const Navbar = () => {
             <nav className="hidden items-center gap-8 md:flex">
               <Link
                 href="#"
-                className="text-sm font-delight-500 text-white/70 transition hover:text-white"
+                className="text-sm cursor-pointer font-delight-500 text-white/70 transition hover:text-white"
               >
                 Pricing
               </Link>
 
               <Link
                 href="#"
-                className="text-sm font-delight-500 text-white/70 transition hover:text-white"
+                className="text-sm cursor-pointer font-delight-500 text-white/70 transition hover:text-white"
               >
                 Careers
               </Link>
 
               <Link
                 href="#"
-                className="text-sm font-delight-500 text-white/70 transition hover:text-white"
+                className="text-sm cursor-pointer font-delight-500 text-white/70 transition hover:text-white"
               >
                 Blog
               </Link>
@@ -64,7 +68,7 @@ const Navbar = () => {
 
           {/* Buttons */}
           <div className="flex items-center gap-2 ">
-            <Button
+            {/* <Button
               className="
                   rounded-[10px]
                   bg-[#1d1d24]
@@ -78,10 +82,13 @@ const Navbar = () => {
                 "
             >
               Login
-            </Button>
+            </Button> */}
 
-            <Button
-              className="
+            {session ? (
+              <Link href={"/apps"}>
+                <Button
+                  className="
+                  cursor-pointer
                   flex
                   items-center
                   gap-2
@@ -95,9 +102,31 @@ const Navbar = () => {
                   transition
                   hover:bg-neutral-200
                 "
-            >
-              Get Started
-              <svg
+                >
+                  apps
+                </Button>
+              </Link>
+            ) : (
+              <Link href={"/login"}>
+                <Button
+                  className="
+                  cursor-pointer
+                  flex
+                  items-center
+                  gap-2
+                  rounded-[10px]
+                  bg-white
+                  px-3
+                  py-2
+                  text-sm
+                  font-delight-500
+                  text-black
+                  transition
+                  hover:bg-neutral-200
+                "
+                >
+                  login
+                  {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4 transition group-hover:translate-x-1"
                 fill="none"
@@ -110,8 +139,10 @@ const Navbar = () => {
                   strokeLinejoin="round"
                   d="M5 12h14M13 5l7 7-7 7"
                 />
-              </svg>
-            </Button>
+              </svg> */}
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </LiquidGlass>

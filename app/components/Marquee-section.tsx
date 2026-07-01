@@ -1,3 +1,5 @@
+"use client"
+
 import Marquee from "@/components/Marquee";
 import PromptChip from "@/components/prompt-chip";
 
@@ -34,9 +36,9 @@ const MarqueeSection = () => {
   return (
     <section className="relative z-10 w-full pt-14">
         {/* Background Glow */}
-        <div
+         <div
           aria-hidden
-          className="pointer-events-none bg-[rgba(10,144,248,.22)] absolute left-1/2 top-1/2 -z-10 h-[60%] w-screen -translate-x-1/2 -translate-y-1/2 rounded-full blur-[160px]"
+          className="pointer-events-none w-[80%] bg-[rgba(10,144,248,.22)] absolute left-1/2 top-1/2 -z-10 h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[160px]"
         />
 
         <div className="mx-auto w-full max-w-[1280px] px-6 md:px-10">
@@ -63,8 +65,8 @@ const MarqueeSection = () => {
           </div>
         </div>
 
-        {/* Marquee comes here */}
-        <div className="mt-20">
+        
+        <div className="mt-20  overflow-hidden">
           <div className="relative left-1/2 mt-20 flex w-screen -translate-x-1/2 flex-col gap-[9px]">
             <Marquee speed={42}>
               {prompts.map((item) => (

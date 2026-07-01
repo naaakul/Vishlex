@@ -123,7 +123,7 @@ linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px)
                     layout
                     className="mx-auto mt-5 max-w-md text-white/60"
                   >
-                    Replace this panel with your actual analytics UI.
+                    Nakul will Replace this panel with your actual analytics UI.
                   </motion.p>
                 </div>
               </div>

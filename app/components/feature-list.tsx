@@ -25,7 +25,7 @@ export default function FeatureList({
         better products.
       </p>
 
-      <ul className="mt-24">
+      <ul className="mt-12">
         {features.map((feature, index) => {
           const isActive = active === index;
 
@@ -67,7 +67,7 @@ export default function FeatureList({
                       transition={{
                         duration: 0.35,
                       }}
-                      className="max-w-md overflow-hidden font-delight text-[15px] leading-7 text-white/65"
+                      className="max-w-[90%] overflow-hidden font-delight text-[15px] leading-7 text-white/65"
                     >
                       {feature.description}
                     </motion.p>
@@ -76,7 +76,7 @@ export default function FeatureList({
               </button>
 
 
-              <div className="relative h-px w-[85%] overflow-hidden bg-white/10">
+              <div className="relative h-px w-[90%] overflow-hidden bg-white/10">
 
                 <motion.div
                   animate={{

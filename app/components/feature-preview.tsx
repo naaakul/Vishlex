@@ -132,7 +132,7 @@ linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px)
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute h-[150%] w-full bg-gradient-to-l from-[#070707] from-10% to-transparent -right-[9.69rem]"></div>
+      {/* <div className="absolute h-[150%] w-full bg-gradient-to-l from-[#070707] from-10% to-transparent -right-[9.69rem]"/> */}
     </div>
   );
 }

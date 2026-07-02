@@ -38,7 +38,7 @@ const Hero = ({ session }: Props) => {
 
       <div className="relative z-20 mt-8 flex flex-col items-center gap-3 sm:flex-row md:mt-10">
         <Link href={"/docs"}>
-          <button className="cursor-pointer hidden rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-[15px] font-medium text-white backdrop-blur transition hover:border-white/25 hover:bg-white/10 sm:inline-flex">
+          <button className="cursor-pointer rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-[15px] font-medium text-white backdrop-blur transition hover:border-white/25 hover:bg-white/10 sm:inline-flex">
             Documentation
           </button>
         </Link>

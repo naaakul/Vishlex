@@ -51,7 +51,7 @@ export default function FeatureSection() {
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     const index = Math.min(
       features.length - 1,
-      Math.floor(v * features.length),
+      Math.floor(v * features.length)
     );
     setActive(index);
   });
@@ -63,36 +63,24 @@ export default function FeatureSection() {
       aria-label="Features"
     >
       <div className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-x-16 gap-y-16 px-6 md:grid-cols-12 md:gap-y-0 md:px-10 md:py-0">
+        <div className="mx-auto bg-amber-400 grid w-full max-w-7xl grid-cols-1 gap-x-16 gap-y-16 px-6 md:grid-cols-12 md:gap-y-0 md:px-10 md:py-0">
+
           <div className="relative lg:col-span-5">
             <ul className="hidden flex-col md:flex">
               <FeatureList features={features} active={active} />
             </ul>
 
-            <div className="flex flex-col lg:hidden">
-              <h2 className="font-instrument text-[52px] leading-[1.05] tracking-[-0.02em] text-white">
-                Powerful analytics.
-              </h2>
-
-              <p className="mb-9 max-w-md text-[16px] leading-7 text-white/65">
-                Everything you need to understand your users and build better
-                products.
-              </p>
-              <div className="mt-10 flex flex-col gap-16 lg:hidden">
-                {features.map((feature, index) => (
-                  <MobileFeatureItem
-                    key={feature.title}
-                    feature={feature}
-                    index={index}
-                  />
-                ))}
-              </div>
+            <div className="mt-10 flex flex-col gap-16 lg:hidden">
+              {features.map((feature, index) => (
+                <MobileFeatureItem key={feature.title} feature={feature} index={index} />
+              ))}
             </div>
           </div>
 
           <div className="relative hidden lg:col-span-7 lg:block">
             <FeaturePreview feature={features[active]} />
           </div>
+
         </div>
       </div>
     </section>
